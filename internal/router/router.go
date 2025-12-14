@@ -66,8 +66,16 @@ func RegisterHealthRoutes(r *Router, handler *handlers.HealthHandler) {
 func RegisterAPIRoutes(r *Router, handler *handlers.APIHandler) {
 	v1 := r.Group("/api/v1")
 	{
-		// TODO: Add API-specific routes here
+		// API info
 		v1.GET("/", handler.GetInfo)
+		
+		// /migrations routes
+		migrations := v1.Group("/migrations")
+		{
+			migrations.POST("/", handler.ExecuteMigration)
+			migrations.GET("/:id", handler.GetMigrationStatus)
+			migrations.POST("/:id/rollback", handler.RollbackMigration)
+		}
 	}
 }
 
